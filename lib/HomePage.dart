@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 import 'screens/notification_list_screen.dart';
 import 'screens/schedule_screen.dart';
 
@@ -15,8 +15,6 @@ class HuscSolving extends StatelessWidget {
     return MaterialApp(home: HomePage(), debugShowCheckedModeBanner: false);
   }
 }
-
-
 
 class HomePage extends StatelessWidget {
   @override
@@ -222,6 +220,7 @@ class ReportPage extends StatelessWidget {
     );
   }
 }
+
 class SchedulePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -229,14 +228,12 @@ class SchedulePage extends StatelessWidget {
   }
 }
 
-
 class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NotificationListScreen(); // ❌ không bao MaterialApp nữa
   }
 }
-
 
 class MessagePage extends StatelessWidget {
   @override

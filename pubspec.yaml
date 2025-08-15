@@ -33,15 +33,28 @@ dependencies:
   flutter:
     sdk: flutter
 
-  google_fonts: ^4.0.4   # hoặc version mới nhất
+  # google_fonts: ^4.0.4   # hoặc version mới nhất
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   # image_picker: ^1.1.0 
   image_picker: ^1.0.4
 
-  http: ^0.13.6
-
+  # http: ^0.13.6
+# cupertino_icons: ^1.0.8
+  dio: ^5.4.0
+  flutter_secure_storage: ^9.0.0
+  shared_preferences: ^2.2.2
+  form_field_validator: ^1.1.0
+  http: ^1.4.0
+  webview_flutter: ^4.7.0
+  webview_flutter_android: ^3.12.1
+  webview_flutter_platform_interface: ^2.10.0
+  crypto: ^3.0.6
+  date_format: ^2.0.9
+  webview_flutter_web: ^0.2.3+4
+  google_fonts: ^6.3.0
+  provider: ^6.1.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -1,40 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/login_web_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'user.dart';
 import 'report_screen.dart';
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: ReportScreen(), // chạy giao diện mới
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-// void main() {
-//   runApp(const MyApp());
-// }
-
 // class MyApp extends StatelessWidget {
 //   const MyApp({super.key});
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return MaterialApp(
+//     return const MaterialApp(
+//       home: ReportScreen(), // chạy giao diện mới
 //       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(
-//         textTheme: GoogleFonts.interTextTheme(), // dùng Inter cho toàn app
-//       ),
-//       home: const SplashScreen(),
 //     );
 //   }
 // }
+
+// void main() {
+//   runApp(const MyApp());
+// }
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        textTheme: GoogleFonts.interTextTheme(), // dùng Inter cho toàn app
+      ),
+      home: const SplashScreen(),
+    );
+  }
+}
 ////chạy giao diện trang user, kick đăng xuất ra màn hình đầu tiên
 // void main() {
 //   runApp(const MyPreviewApp());
@@ -235,11 +236,33 @@ class _SplashScreenState extends State<SplashScreen>
                 const SizedBox(height: 170),
 
                 // Nút Sinh viên
-                buildButton("Sinh viên", _button1Fade, _button1Slide),
+                ElevatedButton(
+                  child: Text("Sinh Viên"),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const LoginWebScreen(role: "student"),
+                      ),
+                    );
+                  },
+                ),
                 const SizedBox(height: 20),
 
                 // Nút Cán bộ
-                buildButton("Cán bộ", _button2Fade, _button2Slide),
+                ElevatedButton(
+                  child: Text("Giảng Viên"),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const LoginWebScreen(role: "teacher"),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
