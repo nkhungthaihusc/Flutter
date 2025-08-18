@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'notification_list_screen.dart';
 import 'schedule_screen.dart';
 import 'user.dart';
+import 'report_screen.dart';
 
 void main() {
   runApp(HuscSolving());
@@ -215,18 +216,7 @@ class HomePage extends StatelessWidget {
 class ReportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Phản ánh hiện trường"),
-        backgroundColor: Color(0xFF1A68B4),
-      ),
-      body: Center(
-        child: Text(
-          "Đây là trang phản ánh hiện trường",
-          style: TextStyle(fontSize: 16),
-        ),
-      ),
-    );
+    return ReportScreen(); // ❌   không bao MaterialApp nữa
   }
 }
 
