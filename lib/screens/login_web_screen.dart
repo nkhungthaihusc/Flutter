@@ -12,6 +12,7 @@ import 'package:crypto/crypto.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'user.dart';
+import 'HomePage.dart';
 
 class LoginWebScreen extends StatefulWidget {
   final String role;
@@ -95,7 +96,7 @@ class _LoginWebScreenState extends State<LoginWebScreen> {
         if (mounted) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => const StudentProfilePage()),
+            MaterialPageRoute(builder: (_) => HomePage()),
           );
         }
       } else {
