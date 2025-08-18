@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // import 'package:intl/intl.dart';
-import 'screens/notification_list_screen.dart';
-import 'screens/schedule_screen.dart';
+import 'notification_list_screen.dart';
+import 'schedule_screen.dart';
 
 void main() {
   runApp(HuscSolving());
