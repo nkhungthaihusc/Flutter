@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 // import 'package:intl/intl.dart';
 import 'notification_list_screen.dart';
 import 'schedule_screen.dart';
+import 'user.dart';
 
 void main() {
   runApp(HuscSolving());
@@ -56,7 +57,15 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(Icons.person, color: Colors.white),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StudentProfilePage()),
+                    );
+                  },
+                  child: Icon(Icons.person, color: Colors.white),
+                ),
               ],
             ),
           ),
