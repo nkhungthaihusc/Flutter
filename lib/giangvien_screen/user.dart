@@ -7,9 +7,9 @@ class StudentProfilePage extends StatelessWidget {
   const StudentProfilePage({super.key});
 
   // Dữ liệu giả lập
-  final String fullName = "NGUYỄN VĂN B";
+  final String fullName = "TRẦN NGUYÊN PHONG";
   final Map<String, String> info = const {
-    "Mã sinh viên:": "23T1010101",
+    "Mã giảng viên:": "DHT0220",
     "Giới tính:": "Nam",
     "Ngày sinh:": "01/01/2005",
     "Nơi sinh:": "Huế",
@@ -18,7 +18,7 @@ class StudentProfilePage extends StatelessWidget {
     "Tôn giáo:": "Không",
     "Số CCCD:": "012345678901",
     "Số điện thoại:": "0987654321",
-    "Email:": "23T1010101@husc.edu.vn",
+    "Email:": "dht0220@husc.edu.vn",
   };
 
   @override
