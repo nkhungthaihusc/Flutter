@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/giangvien_screen/HomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dungchung_screen/splash_screen.dart';
+import 'giangvien_screen/gv_report_screen.dart';
 
 void main() => runApp(const MyApp());
 
