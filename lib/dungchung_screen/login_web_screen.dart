@@ -11,8 +11,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:crypto/crypto.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import 'user.dart';
-import 'HomePage.dart';
+import '../sinhvien_screen/user.dart';
+import '../sinhvien_screen/HomePage.dart';
 
 class LoginWebScreen extends StatefulWidget {
   final String role;
