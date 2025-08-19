@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/giangvien_screen/HomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dungchung_screen/splash_screen.dart';
 import 'giangvien_screen/gv_report_screen.dart';
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(textTheme: GoogleFonts.interTextTheme()),
-      home:  HomePage(), // gọi splash screen
+      home: const ReportScreen(), // gọi splash screen
     );
   }
 }
