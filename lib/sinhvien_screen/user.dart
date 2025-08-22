@@ -4,7 +4,7 @@ import 'package:flutter_application_1/providers/student_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_application_1/main.dart'; // Để dùng SplashScreen từ file main.dart
 import 'package:provider/provider.dart';
-import 'splash_screen.dart';
+import '../dungchung_screen/splash_screen.dart';
 
 class StudentProfilePage extends StatelessWidget {
   const StudentProfilePage({super.key});

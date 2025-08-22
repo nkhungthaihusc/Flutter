@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/providers/student_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'screens/splash_screen.dart';
+import 'dungchung_screen/splash_screen.dart';
+import 'giangvien_screen/gv_report_screen.dart';
 
 void main() => runApp(const MyApp());
 
