@@ -22,6 +22,43 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _button2Fade;
   late Animation<Offset> _button2Slide;
 
+  Widget buildAnimatedButton({
+    required String text,
+    required Animation<double> fadeAnimation,
+    required Animation<Offset> slideAnimation,
+    required VoidCallback onPressed,
+  }) {
+    return FadeTransition(
+      opacity: fadeAnimation,
+      child: SlideTransition(
+        position: slideAnimation,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.9, // chiếm 75% chiều ngang màn hình
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blueAccent,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: 6,
+              shadowColor: Colors.black54,
+            ),
+            onPressed: onPressed,
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.1,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -146,29 +183,31 @@ class _SplashScreenState extends State<SplashScreen>
                 const SizedBox(height: 170),
 
                 // Nút Sinh viên
-                ElevatedButton(
-                  child: const Text("Sinh Viên"),
+                buildAnimatedButton(
+                  text: "Sinh Viên",
+                  fadeAnimation: _button1Fade,
+                  slideAnimation: _button1Slide,
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            const LoginWebScreen(role: "student"),
+                        builder: (context) => const LoginWebScreen(role: "student"),
                       ),
                     );
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
 
                 // Nút Giảng viên
-                ElevatedButton(
-                  child: const Text("Giảng Viên"),
+                buildAnimatedButton(
+                  text: "Giảng Viên",
+                  fadeAnimation: _button2Fade,
+                  slideAnimation: _button2Slide,
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            const LoginWebScreen(role: "teacher"),
+                        builder: (context) => const LoginWebScreen(role: "teacher"),
                       ),
                     );
                   },

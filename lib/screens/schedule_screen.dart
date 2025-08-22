@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../models/schedule_model.dart';
-import '../../services/schedule_service.dart';
+import 'package:flutter_application_1/models/schedule_model.dart';
+import 'package:flutter_application_1/services/schedule_service.dart';
 
 class ScheduleScreen extends StatefulWidget {
   @override
