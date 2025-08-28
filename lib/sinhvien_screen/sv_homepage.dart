@@ -1,24 +1,35 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-// import 'package:intl/intl.dart';
+import 'package:flutter_application_1/models/students_models/user_profile_model.dart';
+import 'package:flutter_application_1/providers/student_provider.dart';
+import 'package:flutter_application_1/repositories/auth_storage.dart';
+import 'package:provider/provider.dart';
 import 'notification_list_screen.dart';
 import 'schedule_screen.dart';
 import 'user.dart';
-import 'gv_report_screen.dart';
+import 'report_screen.dart';
 
 void main() {
   runApp(HuscSolving());
 }
 
 class HuscSolving extends StatelessWidget {
+  const HuscSolving({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HomePage(), debugShowCheckedModeBanner: false);
+    return MaterialApp(home: HomePageSV(), debugShowCheckedModeBanner: false);
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePageSV extends StatefulWidget {
+  const HomePageSV({super.key});
+
+  @override
+  State<HomePageSV> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePageSV> {
+  QuaTrinhHoc? selectedQuaTrinhHoc;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +83,140 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(height: 15),
 
+          FutureBuilder(
+            future: context.read<StudentProvider>().getUserCurrent(),
+            initialData: null,
+            builder: (BuildContext context , AsyncSnapshot snapshot){
+              if (snapshot.connectionState == ConnectionState.waiting){
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.data == null){
+                return Center(
+                  child: Text("No data"),
+                );
+              }
+              if (snapshot.error == true){
+                return Center(
+                  child: Text("Data err"),
+                );
+              }
+
+              final StudentProfile student = snapshot.data as StudentProfile;
+              final List<QuaTrinhHoc> quatrinhhoc = student.nganhHoc.quaTrinhHoc;
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              PopupMenuButton<QuaTrinhHoc>(
+                                onSelected: (value) async {
+                                  setState(() {
+                                    selectedQuaTrinhHoc = value;
+                                  });
+                                  await StudentStorges.saveStudentStorages(
+                                      StudentID: student.maSinhVien,
+                                      mahocki: value.maHocKy);
+                                },
+                                itemBuilder: (context) => quatrinhhoc.map((e) {
+                                  return PopupMenuItem<QuaTrinhHoc>(
+                                    value: e, // ví dụ: "2024-2025.1"
+                                    child: Text("Học kỳ ${e.maHocKy}"),
+                                  );
+                                }).toList(),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
+                                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.calendar_month, color: Colors.blue),
+                                      SizedBox(width: 8),
+                                      Text("Chọn kì tác nghiệp"),
+                                      Icon(Icons.arrow_drop_down),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.shade50,
+                            border: Border.all(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            selectedQuaTrinhHoc?.maHocKy == null
+                                ? "Chưa chọn kì học"
+                                : "Bạn chọn: ${selectedQuaTrinhHoc?.maHocKy}",
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: EdgeInsets.only(left: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    border: Border.all(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    selectedQuaTrinhHoc?.tenNganh == null
+                        ? "Chưa chọn kì học"
+                        : "${selectedQuaTrinhHoc?.tenNganh}",
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                ),
+              ),
+              SizedBox(width: 5),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    border: Border.all(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    selectedQuaTrinhHoc?.tenKhoaHoc == null
+                        ? "Chưa chọn kì học"
+                        : "${selectedQuaTrinhHoc?.tenKhoaHoc}",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 15),
           // Image of university
           Container(
             margin: EdgeInsets.symmetric(vertical: 12),
@@ -216,6 +360,8 @@ class HomePage extends StatelessWidget {
 }
 
 class ReportPage extends StatelessWidget {
+  const ReportPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ReportScreen(); // ❌   không bao MaterialApp nữa
@@ -223,6 +369,8 @@ class ReportPage extends StatelessWidget {
 }
 
 class SchedulePage extends StatelessWidget {
+  const SchedulePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ScheduleScreen(); // ❌   không bao MaterialApp nữa
@@ -230,6 +378,8 @@ class SchedulePage extends StatelessWidget {
 }
 
 class NotificationPage extends StatelessWidget {
+  const NotificationPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return NotificationListScreen(); // ❌ không bao MaterialApp nữa
@@ -237,6 +387,8 @@ class NotificationPage extends StatelessWidget {
 }
 
 class MessagePage extends StatelessWidget {
+  const MessagePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

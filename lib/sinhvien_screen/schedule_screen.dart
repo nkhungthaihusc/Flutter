@@ -1,91 +1,160 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/schedule_model.dart';
-import 'package:flutter_application_1/services/schedule_service.dart';
+import 'package:flutter_application_1/providers/student_provider.dart';
+import 'package:provider/provider.dart';
 
 class ScheduleScreen extends StatefulWidget {
+  const ScheduleScreen({super.key});
+
   @override
-  _ScheduleScreenState createState() => _ScheduleScreenState();
+  State<ScheduleScreen> createState() => _ScheduleScreenState();
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  int currentWeek = 1;
   bool showWholeSemester = false;
-  Map<int, Map<String, Map<String, Lesson?>>> weeklySchedules = {};
-  DateTime semesterStartDate = DateTime(2025, 7, 1);
 
   @override
   void initState() {
     super.initState();
-    currentWeek = calculateCurrentWeek(semesterStartDate);
-    loadSchedule();
+    context.read<StudentProvider>().getSchedule();
+  }
+  // Lấy danh sách ngày trong tuần bắt đầu từ thứ 2
+  List<DateTime> getCurrentWeekDates() {
+    DateTime now = DateTime.now();
+    int weekday = now.weekday; // 1 = Thứ 2
+    DateTime monday = now.subtract(Duration(days: weekday - 1));
+    return List.generate(7, (i) => monday.add(Duration(days: i)));
   }
 
-  int calculateCurrentWeek(DateTime startDate) {
-    final today = DateTime.now();
-    return ((today.difference(startDate).inDays) ~/ 7) + 1;
+  // Hàm mở dialog chi tiết môn học
+  void _showSubjectDetail({
+    required String subject,
+    required String tiet,
+    required String phong,
+    required String gv,
+    required String buoi,
+    required DateTime ngay,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    subject,
+                    style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text("📅 Ngày: ${ngay.day}/${ngay.month}/${ngay.year}"),
+                Text("🕑 Buổi: $buoi"),
+                Text("⏰ Tiết: $tiet"),
+                Text("🏫 Phòng: $phong"),
+                Text("👨‍🏫 Giảng viên: $gv"),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Đóng"),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
-  Future<void> loadSchedule() async {
-    try {
-      if (showWholeSemester) {
-        final data = await ScheduleService.fetchWholeSemesterSchedule();
-        setState(() => weeklySchedules = data);
-      } else {
-        final data = await ScheduleService.fetchCurrentWeekSchedule(currentWeek);
-        setState(() => weeklySchedules[currentWeek] = data);
-      }
-    } catch (e) {
-      print('Error loading schedule: $e');
-    }
-  }
-
-  DateTime getWeekStartDate(int week) => semesterStartDate.add(Duration(days: (week - 1) * 7));
-  DateTime getWeekEndDate(int week) => getWeekStartDate(week).add(Duration(days: 6));
-
-  Widget buildScheduleTable(Map<String, Map<String, Lesson?>> schedule) {
-    final days = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
+  Widget buildScheduleTable() {
+    final days = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
     final sessions = ['Sáng', 'Chiều', 'Tối'];
+    final weekDates = getCurrentWeekDates();
 
     return Table(
       border: TableBorder.all(color: Colors.grey),
-      defaultColumnWidth: FixedColumnWidth(120),
+      defaultColumnWidth: const FixedColumnWidth(120),
       children: [
+        // Hàng tiêu đề
         TableRow(
           children: [
             Container(),
-            ...days.map((d) => Center(child: Padding(
-              padding: EdgeInsets.all(8),
-              child: Text(d, style: TextStyle(fontWeight: FontWeight.bold)),
-            ))),
+            ...List.generate(days.length, (i) {
+              final d = weekDates[i];
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      Text(days[i],
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Text("${d.day}/${d.month}",
+                          style: const TextStyle(color: Colors.grey)),
+                    ],
+                  ),
+                ),
+              );
+            }),
           ],
         ),
+        // Các buổi học
         ...sessions.map((session) {
           return TableRow(
             children: [
               Container(
                 color: Colors.grey[300],
-                padding: EdgeInsets.all(8),
-                child: Text(session, style: TextStyle(fontWeight: FontWeight.bold)),
+                padding: const EdgeInsets.all(8),
+                child: Text(session,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
-              ...days.map((day) {
-                final lesson = schedule[session]?[day];
-                if (lesson == null) return SizedBox(height: 70);
-                return Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(lesson.subject, style: TextStyle(color: Colors.blue)),
-                      Text('Tiết: ${lesson.time}', style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text('Phòng: ${lesson.room}'),
-                      Text('GV: ${lesson.teacher}', style: TextStyle(fontWeight: FontWeight.bold)),
-                    ],
+              ...List.generate(days.length, (i) {
+                final d = weekDates[i];
+                // Dữ liệu demo
+                final subject = showWholeSemester ? "Môn toàn kỳ" : "Môn tuần";
+                final tiet = "1-3";
+                final phong = "E401";
+                final gv = "Nguyễn Văn A";
+
+                return InkWell(
+                  onTap: () {
+                    _showSubjectDetail(
+                      subject: subject,
+                      tiet: tiet,
+                      phong: phong,
+                      gv: gv,
+                      buoi: session,
+                      ngay: d,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(subject, style: const TextStyle(color: Colors.blue)),
+                        Text("Tiết: $tiet",
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                        Text("Phòng: $phong"),
+                        Text("GV: $gv",
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
                   ),
                 );
-              }).toList(),
+              }),
             ],
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -94,40 +163,30 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Thời khóa biểu'),
-        backgroundColor: Color(0xFF1A68B4),
-        leading: BackButton(),
+        title: const Text('Thời khóa biểu'),
+        backgroundColor: const Color(0xFF1A68B4),
+        leading: const BackButton(),
       ),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ChoiceChip(
-                  label: Text('Tuần hiện tại'),
+                  label: const Text('Tuần hiện tại'),
                   selected: !showWholeSemester,
                   onSelected: (selected) {
-                    if (selected) {
-                      setState(() {
-                        showWholeSemester = false;
-                      });
-                      loadSchedule();
-                    }
+                    setState(() => showWholeSemester = false);
                   },
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 ChoiceChip(
-                  label: Text('Toàn học kỳ'),
+                  label: const Text('Toàn học kỳ'),
                   selected: showWholeSemester,
                   onSelected: (selected) {
-                    if (selected) {
-                      setState(() {
-                        showWholeSemester = true;
-                      });
-                      loadSchedule();
-                    }
+                    setState(() => showWholeSemester = true);
                   },
                 ),
               ],
@@ -137,34 +196,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(8),
-                child: showWholeSemester
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: weeklySchedules.entries.map((entry) {
-                          final week = entry.key;
-                          final schedule = entry.value;
-                          final startDate = getWeekStartDate(week);
-                          final endDate = getWeekEndDate(week);
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Tuần $week', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                              Text(
-                                'Từ ${startDate.day}/${startDate.month} đến ${endDate.day}/${endDate.month}',
-                                style: TextStyle(color: Colors.grey[700]),
-                              ),
-                              SizedBox(height: 8),
-                              buildScheduleTable(schedule),
-                              SizedBox(height: 20),
-                            ],
-                          );
-                        }).toList(),
-                      )
-                    : buildScheduleTable(weeklySchedules[currentWeek] ?? {}),
+                padding: const EdgeInsets.all(8),
+                child: buildScheduleTable(),
               ),
             ),
-         
           ),
         ],
       ),

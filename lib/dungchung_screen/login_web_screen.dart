@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/giangvien_screen/gv_homepage.dart';
 import 'package:flutter_application_1/repositories/auth_storage.dart';
 
 // import 'package:library_app/Screens/Authentication/dashboard_screen.dart';
@@ -13,7 +14,7 @@ import 'package:crypto/crypto.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import '../sinhvien_screen/user.dart';
-import '../sinhvien_screen/HomePage.dart';
+import '../sinhvien_screen/sv_homepage.dart';
 
 class LoginWebScreen extends StatefulWidget {
   final String role;
@@ -94,11 +95,21 @@ class _LoginWebScreenState extends State<LoginWebScreen> {
           token: token,
         );
 
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => HomePage()),
-          );
+        if (widget.role == "student"){
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => HomePageSV()),
+            );
+          }
+        }
+        else{
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => HomePageGV()),
+            );
+          }
         }
       } else {
         print("Failed to verify code. Status code: ${response.statusCode}");

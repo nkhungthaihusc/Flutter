@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_application_1/main.dart';
 
-import 'package:flutter_application_1/sinhvien_screen/HomePage.dart';
+import 'package:flutter_application_1/sinhvien_screen/sv_homepage.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

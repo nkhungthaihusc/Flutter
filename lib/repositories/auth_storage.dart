@@ -39,3 +39,27 @@ class AuthStorage {
     return prefs.getString(_appIdKey);
   }
 }
+
+class StudentStorges{
+  static const _StudentID = "Student-id";
+  static const _maHocKi = "MaHocKi";
+
+  static Future<void> saveStudentStorages({
+    required String StudentID,
+    required String mahocki,
+  } ) async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_StudentID , StudentID);
+    await prefs.setString(_maHocKi, mahocki);
+  }
+
+  static Future<String?> getStudentID() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_StudentID);
+  }
+
+  static Future<String?> getMaHocKi() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_maHocKi);
+  }
+}

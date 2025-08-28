@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/user_profile_model.dart';
+import 'package:flutter_application_1/models/students_models/user_profile_model.dart';
 import 'package:flutter_application_1/providers/student_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_application_1/main.dart'; // Để dùng SplashScreen từ file main.dart
