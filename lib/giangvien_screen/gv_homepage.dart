@@ -11,9 +11,14 @@ void main() {
   runApp(HuscSolving());
 }
 
-class HuscSolving extends StatelessWidget {
+class HuscSolving extends StatefulWidget {
   const HuscSolving({super.key});
 
+  @override
+  State<HuscSolving> createState() => _HuscSolvingState();
+}
+
+class _HuscSolvingState extends State<HuscSolving> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: HomePageGV(), debugShowCheckedModeBanner: false);
@@ -21,6 +26,8 @@ class HuscSolving extends StatelessWidget {
 }
 
 class HomePageGV extends StatelessWidget {
+  const HomePageGV({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

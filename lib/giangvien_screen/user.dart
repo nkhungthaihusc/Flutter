@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_application_1/main.dart'; // Để dùng SplashScreen từ file main.dart
+import 'package:shared_preferences/shared_preferences.dart';
 import '../dungchung_screen/splash_screen.dart';
 
 class StudentProfilePage extends StatelessWidget {
   const StudentProfilePage({super.key});
 
+  Future<void> logout() async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove("ums-token");
+    await prefs.remove("ums-role");
+  }
   // Dữ liệu giả lập
   final String fullName = "TRẦN NGUYÊN PHONG";
   final Map<String, String> info = const {
@@ -181,7 +187,8 @@ class StudentProfilePage extends StatelessWidget {
                                   ),
                                   TextButton(
                                     child: const Text('Có'),
-                                    onPressed: () {
+                                    onPressed: () async{
+                                      await logout();
                                       Navigator.of(
                                         context,
                                       ).pop(); // Đóng dialog

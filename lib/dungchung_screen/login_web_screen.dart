@@ -90,8 +90,7 @@ class _LoginWebScreenState extends State<LoginWebScreen> {
         String token = await jsonData["Data"]["Token"];
         await AuthStorage.saveDataLogin(
           appId: appID,
-          time: time,
-          signature: signature,
+          role: widget.role,
           token: token,
         );
 

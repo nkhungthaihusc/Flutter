@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_application_1/models/students_models/user_profile_model.dart';
 import 'package:flutter_application_1/repositories/auth_storage.dart';
+import 'package:intl/intl.dart';
 
 
 class ApiRepository{
@@ -8,9 +12,14 @@ class ApiRepository{
   static Future<dynamic> setHeaders (String uri) async{
     final dio = Dio();
 
+    String secretKey = "1234567890";
     final appId = await AuthStorage.getAppId();
-    final time = await AuthStorage.getTime();
-    final signature = await AuthStorage.getSignature();
+    DateTime VNtime = DateTime.now().toUtc().add(const Duration(hours: 7));
+    final time = DateFormat('yyyyMMddHHmmss').format(VNtime);
+    // print(time);
+    String raw = "$appId$secretKey$time";
+    final signature = md5.convert(utf8.encode(raw)).toString();
+    // print(signature);
     final token = await AuthStorage.getToken();
 
     final res = await dio.get(uri,
